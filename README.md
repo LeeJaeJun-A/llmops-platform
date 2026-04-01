@@ -375,10 +375,6 @@ make lint
 | Metrics (path normalization) | 7 | 95% |
 | Integration (health endpoints) | 2 | — |
 
-## Troubleshooting
-
-See [docs/troubleshooting.md](docs/troubleshooting.md) for common issues and fixes.
-
 ## License
 
 MIT
