@@ -56,7 +56,9 @@ class LLMRouter:
                 metadata={
                     "temperature": request.temperature,
                     "max_tokens": request.max_tokens,
-                    "finish_reason": response.choices[0].finish_reason if response.choices else None,
+                    "finish_reason": response.choices[0].finish_reason
+                    if response.choices
+                    else None,
                 },
             )
 

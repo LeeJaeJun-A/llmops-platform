@@ -60,9 +60,7 @@ async def test_rate_limit_dependency_graceful_degradation():
     request.headers.get.return_value = "test-service"
     request.client.host = "127.0.0.1"
 
-    with patch(
-        "llmops.api.middleware.rate_limit.get_rate_limiter"
-    ) as mock_get:
+    with patch("llmops.api.middleware.rate_limit.get_rate_limiter") as mock_get:
         mock_limiter = AsyncMock()
         mock_limiter.check = AsyncMock(side_effect=ConnectionError("Redis down"))
         mock_get.return_value = mock_limiter
@@ -78,9 +76,7 @@ async def test_rate_limit_dependency_propagates_429():
     request.headers.get.return_value = "test-service"
     request.client.host = "127.0.0.1"
 
-    with patch(
-        "llmops.api.middleware.rate_limit.get_rate_limiter"
-    ) as mock_get:
+    with patch("llmops.api.middleware.rate_limit.get_rate_limiter") as mock_get:
         mock_limiter = AsyncMock()
         mock_limiter.check = AsyncMock(
             side_effect=HTTPException(status_code=429, detail="Rate limit exceeded")
@@ -99,9 +95,7 @@ async def test_rate_limit_dependency_uses_service_name():
     request.headers.get.return_value = "my-service"
     request.client.host = "127.0.0.1"
 
-    with patch(
-        "llmops.api.middleware.rate_limit.get_rate_limiter"
-    ) as mock_get:
+    with patch("llmops.api.middleware.rate_limit.get_rate_limiter") as mock_get:
         mock_limiter = AsyncMock()
         mock_limiter.check = AsyncMock()
         mock_get.return_value = mock_limiter
@@ -117,9 +111,7 @@ async def test_rate_limit_dependency_falls_back_to_ip():
     request.headers.get.return_value = ""
     request.client.host = "192.168.1.1"
 
-    with patch(
-        "llmops.api.middleware.rate_limit.get_rate_limiter"
-    ) as mock_get:
+    with patch("llmops.api.middleware.rate_limit.get_rate_limiter") as mock_get:
         mock_limiter = AsyncMock()
         mock_limiter.check = AsyncMock()
         mock_get.return_value = mock_limiter

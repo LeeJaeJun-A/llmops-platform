@@ -158,9 +158,7 @@ async def test_chat_stream_yields_chunks(chat_request):
             for c in [chunk1, chunk2]:
                 yield c
 
-        mock_client.aio.models.generate_content_stream = AsyncMock(
-            return_value=mock_stream()
-        )
+        mock_client.aio.models.generate_content_stream = AsyncMock(return_value=mock_stream())
 
         from llmops.core.gateway.gemini import GeminiProvider
 

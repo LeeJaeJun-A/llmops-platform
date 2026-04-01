@@ -36,13 +36,9 @@ async def create_experiment(
     """Create a new experiment."""
     try:
         param_ranges = [
-            ParameterRange(**p.model_dump())
-            for p in req.parameter_space.get("parameters", [])
+            ParameterRange(**p.model_dump()) for p in req.parameter_space.get("parameters", [])
         ]
-        variants = [
-            ParameterSet(variant_id=v.variant_id, values=v.values)
-            for v in req.variants
-        ]
+        variants = [ParameterSet(variant_id=v.variant_id, values=v.values) for v in req.variants]
 
         config = ExperimentConfig(
             name=req.name,

@@ -109,8 +109,8 @@ jobs:
       - name: Helm lint
         run: helm lint helm/llmops-platform/
 
-      - name: Helm template (dev)
-        run: helm template llmops helm/llmops-platform/ -f helm/llmops-platform/values-dev.yaml
+      - name: Helm template (dev) — skip subchart dependencies
+        run: helm template llmops helm/llmops-platform/ -f helm/llmops-platform/values-dev.yaml --set langfuse.enabled=false
 
-      - name: Helm template (prod)
-        run: helm template llmops helm/llmops-platform/ -f helm/llmops-platform/values-prod.yaml
+      - name: Helm template (prod) — skip subchart dependencies
+        run: helm template llmops helm/llmops-platform/ -f helm/llmops-platform/values-prod.yaml --set langfuse.enabled=false

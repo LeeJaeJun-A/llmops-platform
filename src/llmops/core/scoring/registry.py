@@ -12,9 +12,7 @@ def register_scorer(name: str, scorer_cls: type[Scorer]) -> None:
 def get_scorer(name: str) -> Scorer:
     if name not in _registry:
         available = list(_registry.keys())
-        raise ValueError(
-            f"Unknown scoring strategy '{name}'. Available: {available}"
-        )
+        raise ValueError(f"Unknown scoring strategy '{name}'. Available: {available}")
     return _registry[name]()
 
 

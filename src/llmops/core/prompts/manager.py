@@ -23,7 +23,9 @@ def _version_to_dict(v: PromptVersionModel) -> dict[str, Any]:
     }
 
 
-def _prompt_to_dict(p: PromptModel, latest_version: PromptVersionModel | None = None) -> dict[str, Any]:
+def _prompt_to_dict(
+    p: PromptModel, latest_version: PromptVersionModel | None = None
+) -> dict[str, Any]:
     result: dict[str, Any] = {
         "id": str(p.id),
         "name": p.name,
@@ -77,9 +79,7 @@ class PromptManager(PromptStore):
             )
             pv = result.scalar_one_or_none()
             if not pv:
-                raise ValueError(
-                    f"No version in '{environment}' environment for prompt '{name}'"
-                )
+                raise ValueError(f"No version in '{environment}' environment for prompt '{name}'")
             return _version_to_dict(pv)
 
         # Default: latest version
@@ -205,9 +205,7 @@ class PromptManager(PromptStore):
         return [_version_to_dict(v) for v in versions]
 
     async def _get_prompt_by_name(self, name: str) -> PromptModel:
-        result = await self._session.execute(
-            select(PromptModel).where(PromptModel.name == name)
-        )
+        result = await self._session.execute(select(PromptModel).where(PromptModel.name == name))
         prompt = result.scalar_one_or_none()
         if not prompt:
             raise ValueError(f"Prompt '{name}' not found")

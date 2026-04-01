@@ -1,15 +1,15 @@
-from enum import Enum
+from enum import StrEnum
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Environment(str, Enum):
+class Environment(StrEnum):
     DEVELOPMENT = "development"
     STAGING = "staging"
     PRODUCTION = "production"
 
 
-class ObservabilityBackendType(str, Enum):
+class ObservabilityBackendType(StrEnum):
     LANGFUSE = "langfuse"
     NOOP = "noop"
 

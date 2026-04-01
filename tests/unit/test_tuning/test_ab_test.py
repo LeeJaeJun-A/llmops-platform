@@ -3,10 +3,7 @@ from llmops.core.tuning.base import ParameterSet
 
 
 def _make_variants(n: int) -> list[ParameterSet]:
-    return [
-        ParameterSet(variant_id=f"v{i}", values={"temp": 0.1 * (i + 1)})
-        for i in range(n)
-    ]
+    return [ParameterSet(variant_id=f"v{i}", values={"temp": 0.1 * (i + 1)}) for i in range(n)]
 
 
 def test_allocate_deterministic():

@@ -18,10 +18,7 @@ class ProviderRegistry:
             if provider.supports_model(model):
                 return provider
         available = [p.provider_name for p in self._providers]
-        raise ValueError(
-            f"No provider found for model '{model}'. "
-            f"Available providers: {available}"
-        )
+        raise ValueError(f"No provider found for model '{model}'. Available providers: {available}")
 
     def list_providers(self) -> list[str]:
         return [p.provider_name for p in self._providers]

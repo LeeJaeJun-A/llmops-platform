@@ -10,14 +10,12 @@ class PromptStore(ABC):
     @abstractmethod
     async def get(
         self, name: str, *, version: int | None = None, environment: str | None = None
-    ) -> dict[str, Any]:
-        ...
+    ) -> dict[str, Any]: ...
 
     @abstractmethod
     async def create(
         self, name: str, template: str, *, description: str = "", variables: dict | None = None
-    ) -> dict[str, Any]:
-        ...
+    ) -> dict[str, Any]: ...
 
     @abstractmethod
     async def create_version(
@@ -27,19 +25,13 @@ class PromptStore(ABC):
         *,
         variables: dict | None = None,
         change_note: str = "",
-    ) -> dict[str, Any]:
-        ...
+    ) -> dict[str, Any]: ...
 
     @abstractmethod
-    async def promote(
-        self, name: str, version: int, target_env: str
-    ) -> dict[str, Any]:
-        ...
+    async def promote(self, name: str, version: int, target_env: str) -> dict[str, Any]: ...
 
     @abstractmethod
-    async def list_prompts(self) -> list[dict[str, Any]]:
-        ...
+    async def list_prompts(self) -> list[dict[str, Any]]: ...
 
     @abstractmethod
-    async def list_versions(self, name: str) -> list[dict[str, Any]]:
-        ...
+    async def list_versions(self, name: str) -> list[dict[str, Any]]: ...

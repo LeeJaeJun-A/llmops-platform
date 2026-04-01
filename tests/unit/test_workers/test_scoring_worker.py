@@ -16,9 +16,7 @@ def sample_job():
         "input_text": "What is 2+2?",
         "output_text": "4",
         "reference_text": "4",
-        "scorers_config": [
-            {"strategy": "rule_based", "weight": 1.0, "config": {}}
-        ],
+        "scorers_config": [{"strategy": "rule_based", "weight": 1.0, "config": {}}],
         "_retry_count": 0,
     }
 
@@ -27,24 +25,16 @@ def sample_job():
 def mock_pipeline_result():
     return PipelineResult(
         aggregate_score=0.9,
-        individual_scores=[
-            ScoreResult(name="rule_based", value=0.9, comment="Good", metadata={})
-        ],
+        individual_scores=[ScoreResult(name="rule_based", value=0.9, comment="Good", metadata={})],
     )
 
 
 @pytest.mark.asyncio
 async def test_process_job(sample_job, mock_pipeline_result):
     with (
-        patch(
-            "llmops.workers.scoring_worker.ScoringPipeline"
-        ) as mock_pipeline_cls,
-        patch(
-            "llmops.workers.scoring_worker.async_session_factory"
-        ) as mock_session_factory,
-        patch(
-            "llmops.workers.scoring_worker.get_observability_backend"
-        ) as mock_obs_fn,
+        patch("llmops.workers.scoring_worker.ScoringPipeline") as mock_pipeline_cls,
+        patch("llmops.workers.scoring_worker.async_session_factory") as mock_session_factory,
+        patch("llmops.workers.scoring_worker.get_observability_backend") as mock_obs_fn,
     ):
         mock_pipeline = AsyncMock()
         mock_pipeline.run = AsyncMock(return_value=mock_pipeline_result)

@@ -39,9 +39,7 @@ class ExperimentRepository:
         await self._session.flush()
         return experiment
 
-    async def get_scored_trials(
-        self, experiment_id: str | uuid.UUID
-    ) -> list[ExperimentTrialModel]:
+    async def get_scored_trials(self, experiment_id: str | uuid.UUID) -> list[ExperimentTrialModel]:
         result = await self._session.execute(
             select(ExperimentTrialModel).where(
                 ExperimentTrialModel.experiment_id == experiment_id,

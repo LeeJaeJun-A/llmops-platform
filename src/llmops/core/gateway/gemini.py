@@ -54,13 +54,13 @@ class GeminiProvider(LLMProvider):
             else:
                 # Gemini uses "model" instead of "assistant"
                 role = "model" if msg.role == Role.ASSISTANT else "user"
-                contents.append(
-                    Content(role=role, parts=[Part(text=msg.content)])
-                )
+                contents.append(Content(role=role, parts=[Part(text=msg.content)]))
 
         return contents, system_instruction
 
-    def _build_config(self, request: ChatRequest, system_instruction: str | None) -> GenerateContentConfig:
+    def _build_config(
+        self, request: ChatRequest, system_instruction: str | None
+    ) -> GenerateContentConfig:
         config = GenerateContentConfig(
             temperature=request.temperature,
             top_p=request.top_p,
@@ -78,12 +78,16 @@ class GeminiProvider(LLMProvider):
 
         response = await self._client.aio.models.generate_content(
             model=request.model,
-            contents=contents,
+            contents=contents,  # type: ignore[arg-type]
             config=config,
         )
 
         content = ""
-        if response.candidates and response.candidates[0].content and response.candidates[0].content.parts:
+        if (
+            response.candidates
+            and response.candidates[0].content
+            and response.candidates[0].content.parts
+        ):
             for part in response.candidates[0].content.parts:
                 if part.text:
                     content += part.text
@@ -126,12 +130,16 @@ class GeminiProvider(LLMProvider):
 
         stream = await self._client.aio.models.generate_content_stream(
             model=request.model,
-            contents=contents,
+            contents=contents,  # type: ignore[arg-type]
             config=config,
         )
 
         async for chunk in stream:
-            if chunk.candidates and chunk.candidates[0].content and chunk.candidates[0].content.parts:
+            if (
+                chunk.candidates
+                and chunk.candidates[0].content
+                and chunk.candidates[0].content.parts
+            ):
                 for part in chunk.candidates[0].content.parts:
                     if part.text:
                         yield ChatResponseChunk(

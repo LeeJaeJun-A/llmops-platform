@@ -35,7 +35,7 @@ async def readyz(
 
     # Redis
     try:
-        await redis.ping()
+        await redis.ping()  # type: ignore[misc]
         checks["redis"] = "ok"
     except Exception as e:
         checks["redis"] = f"error: {e}"

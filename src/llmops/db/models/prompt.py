@@ -1,6 +1,6 @@
 """Database models for prompt management."""
 
-from enum import Enum as PyEnum
+from enum import StrEnum as PyStrEnum
 
 from sqlalchemy import Enum, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSON, UUID
@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from llmops.db.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 
-class PromptEnvironment(str, PyEnum):
+class PromptEnvironment(PyStrEnum):
     DRAFT = "draft"
     STAGING = "staging"
     PRODUCTION = "production"
@@ -35,9 +35,7 @@ class PromptVersionModel(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     """Immutable versioned prompt template."""
 
     __tablename__ = "prompt_versions"
-    __table_args__ = (
-        UniqueConstraint("prompt_id", "version", name="uq_prompt_version"),
-    )
+    __table_args__ = (UniqueConstraint("prompt_id", "version", name="uq_prompt_version"),)
 
     prompt_id: Mapped["UUID"] = mapped_column(
         UUID(as_uuid=True),
@@ -53,7 +51,10 @@ class PromptVersionModel(Base, UUIDPrimaryKeyMixin, TimestampMixin):
         nullable=False,
     )
     variables: Mapped[dict] = mapped_column(
-        JSON, default=dict, server_default="{}", nullable=False,
+        JSON,
+        default=dict,
+        server_default="{}",
+        nullable=False,
     )
     metadata_: Mapped[dict] = mapped_column("metadata", JSON, default=dict, server_default="{}")
     change_note: Mapped[str] = mapped_column(Text, default="", server_default="")

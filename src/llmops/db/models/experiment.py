@@ -34,9 +34,7 @@ class ExperimentTrialModel(Base, UUIDPrimaryKeyMixin, TimestampMixin):
 
     __tablename__ = "experiment_trials"
 
-    experiment_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), nullable=False, index=True
-    )
+    experiment_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False, index=True)
     variant_id: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     trace_id: Mapped[str] = mapped_column(String(255), nullable=False)
     parameters: Mapped[dict] = mapped_column(JSON, nullable=False)

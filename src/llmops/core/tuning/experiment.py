@@ -78,9 +78,7 @@ class ExperimentRunner:
         await self._session.refresh(exp)
         return _model_to_dict(exp)
 
-    async def allocate_variant(
-        self, experiment_id: str, key: str
-    ) -> ParameterSet | None:
+    async def allocate_variant(self, experiment_id: str, key: str) -> ParameterSet | None:
         """Allocate a variant for a request within a running experiment."""
         exp = await self._get_experiment(experiment_id)
         if exp.status != ExperimentStatus.RUNNING.value:
@@ -142,7 +140,7 @@ class ExperimentRunner:
             if trial.variant_id not in variant_trials:
                 variant_trials[trial.variant_id] = []
                 variant_params[trial.variant_id] = trial.parameters
-            variant_trials[trial.variant_id].append(trial.score)
+            variant_trials[trial.variant_id].append(trial.score)  # type: ignore[arg-type]
 
         variant_results = []
         for vid, scores in variant_trials.items():

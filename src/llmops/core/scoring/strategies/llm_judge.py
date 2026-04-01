@@ -5,7 +5,8 @@ from typing import Any
 
 from llmops.core.scoring.base import Scorer, ScoreResult
 
-DEFAULT_RUBRIC = """You are an expert evaluator. Rate the following AI response on a scale of 0.0 to 1.0.
+DEFAULT_RUBRIC = """\
+You are an expert evaluator. Rate the following AI response on a scale of 0.0 to 1.0.
 
 ## Input
 {input_text}

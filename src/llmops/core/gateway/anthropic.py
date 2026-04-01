@@ -46,10 +46,12 @@ class AnthropicProvider(LLMProvider):
             if msg.role == Role.SYSTEM:
                 system_message = msg.content
             else:
-                messages.append({
-                    "role": msg.role.value,
-                    "content": msg.content,
-                })
+                messages.append(
+                    {
+                        "role": msg.role.value,
+                        "content": msg.content,
+                    }
+                )
 
         params: dict = {
             "model": request.model,

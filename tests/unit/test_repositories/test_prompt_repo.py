@@ -80,9 +80,7 @@ async def test_get_version_by_environment(repo, mock_session):
     result.scalar_one_or_none.return_value = mock_version
     mock_session.execute = AsyncMock(return_value=result)
 
-    version = await repo.get_version(
-        uuid.uuid4(), environment=PromptEnvironment.PRODUCTION
-    )
+    version = await repo.get_version(uuid.uuid4(), environment=PromptEnvironment.PRODUCTION)
     assert version is not None
 
 
@@ -116,8 +114,11 @@ async def test_create_version(repo, mock_session):
 
     prompt_id = uuid.uuid4()
     await repo.create_version(
-        prompt_id, version=3, template="Hello {{ name }}",
-        variables={"name": "string"}, change_note="Added name",
+        prompt_id,
+        version=3,
+        template="Hello {{ name }}",
+        variables={"name": "string"},
+        change_note="Added name",
     )
 
     mock_session.add.assert_called_once()

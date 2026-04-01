@@ -50,7 +50,7 @@ class ScoringPipeline:
         weighted_sum = 0.0
 
         for (_, weight, _), result in zip(self._scorers, results):
-            if isinstance(result, Exception):
+            if isinstance(result, BaseException):
                 continue
             individual_scores.append(result)
             weighted_sum += result.value * weight

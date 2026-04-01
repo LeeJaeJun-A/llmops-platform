@@ -57,9 +57,7 @@ async def client(mock_db, mock_observability):
 
 @pytest.mark.asyncio
 async def test_chat_completions_success(client, mock_llm_response):
-    with patch(
-        "llmops.api.v1.gateway.get_llm_router"
-    ) as mock_get_router:
+    with patch("llmops.api.v1.gateway.get_llm_router") as mock_get_router:
         mock_router = AsyncMock(spec=LLMRouter)
         mock_router.chat = AsyncMock(return_value=mock_llm_response)
         mock_get_router.return_value = mock_router

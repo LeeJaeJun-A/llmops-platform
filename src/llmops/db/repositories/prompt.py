@@ -16,15 +16,11 @@ class PromptRepository:
         self._session = session
 
     async def get_by_name(self, name: str) -> PromptModel | None:
-        result = await self._session.execute(
-            select(PromptModel).where(PromptModel.name == name)
-        )
+        result = await self._session.execute(select(PromptModel).where(PromptModel.name == name))
         return result.scalar_one_or_none()
 
     async def get_by_id(self, prompt_id: uuid.UUID) -> PromptModel | None:
-        result = await self._session.execute(
-            select(PromptModel).where(PromptModel.id == prompt_id)
-        )
+        result = await self._session.execute(select(PromptModel).where(PromptModel.id == prompt_id))
         return result.scalar_one_or_none()
 
     async def list_active(self) -> list[PromptModel]:

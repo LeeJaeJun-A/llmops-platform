@@ -7,9 +7,7 @@ import pytest
 
 @pytest.mark.asyncio
 async def test_check_running_experiments_no_experiments():
-    with patch(
-        "llmops.workers.tuning_worker.async_session_factory"
-    ) as mock_factory:
+    with patch("llmops.workers.tuning_worker.async_session_factory") as mock_factory:
         mock_session = AsyncMock()
         mock_session.__aenter__ = AsyncMock(return_value=mock_session)
         mock_session.__aexit__ = AsyncMock(return_value=False)
@@ -28,12 +26,8 @@ async def test_check_running_experiments_no_experiments():
 @pytest.mark.asyncio
 async def test_check_running_experiments_with_experiment():
     with (
-        patch(
-            "llmops.workers.tuning_worker.async_session_factory"
-        ) as mock_factory,
-        patch(
-            "llmops.workers.tuning_worker.ExperimentRunner"
-        ) as mock_runner_cls,
+        patch("llmops.workers.tuning_worker.async_session_factory") as mock_factory,
+        patch("llmops.workers.tuning_worker.ExperimentRunner") as mock_runner_cls,
     ):
         mock_session = AsyncMock()
         mock_session.__aenter__ = AsyncMock(return_value=mock_session)
@@ -73,12 +67,8 @@ async def test_check_running_experiments_with_experiment():
 async def test_check_experiment_retries_on_failure():
     """Test that individual experiment checks retry on failure."""
     with (
-        patch(
-            "llmops.workers.tuning_worker.async_session_factory"
-        ) as mock_factory,
-        patch(
-            "llmops.workers.tuning_worker.ExperimentRunner"
-        ) as mock_runner_cls,
+        patch("llmops.workers.tuning_worker.async_session_factory") as mock_factory,
+        patch("llmops.workers.tuning_worker.ExperimentRunner") as mock_runner_cls,
         patch("llmops.workers.tuning_worker.asyncio.sleep", new_callable=AsyncMock),
     ):
         mock_session = AsyncMock()

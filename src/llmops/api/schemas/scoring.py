@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 
 # --- Pipeline CRUD ---
 
+
 class ScorerConfigRequest(BaseModel):
     strategy: str
     weight: float = 1.0
@@ -33,6 +34,7 @@ class PipelineListResponse(BaseModel):
 
 # --- Scoring Trigger ---
 
+
 class EvaluateRequest(BaseModel):
     trace_id: str
     pipeline_id: str
@@ -56,6 +58,7 @@ class EvaluateResponse(BaseModel):
 
 
 # --- Query Results ---
+
 
 class ScoreResultsQueryResponse(BaseModel):
     trace_id: str

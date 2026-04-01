@@ -45,9 +45,7 @@ def generate_grid_variants(space: ParameterSpace) -> list[ParameterSet]:
     return variants
 
 
-def generate_random_variants(
-    space: ParameterSpace, count: int = 5
-) -> list[ParameterSet]:
+def generate_random_variants(space: ParameterSpace, count: int = 5) -> list[ParameterSet]:
     """Generate random variants from a parameter space."""
     variants = []
     for _ in range(count):
@@ -55,10 +53,12 @@ def generate_random_variants(
         for param in space.parameters:
             if param.type == "categorical" and param.values:
                 values[param.name] = random.choice(param.values)
-            elif param.type == "continuous" and param.min_value is not None and param.max_value is not None:
-                values[param.name] = round(
-                    random.uniform(param.min_value, param.max_value), 4
-                )
+            elif (
+                param.type == "continuous"
+                and param.min_value is not None
+                and param.max_value is not None
+            ):
+                values[param.name] = round(random.uniform(param.min_value, param.max_value), 4)
             elif param.values:
                 values[param.name] = random.choice(param.values)
 

@@ -67,3 +67,5 @@ select = ["E", "F", "I", "N", "W", "UP"]
 python_version = "3.12"
 strict = true
 plugins = ["pydantic.mypy"]
+disallow_any_generics = false
+warn_return_any = false

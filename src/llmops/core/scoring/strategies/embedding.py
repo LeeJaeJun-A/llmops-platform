@@ -24,8 +24,8 @@ def _cosine_similarity(vec_a: dict[str, int], vec_b: dict[str, int]) -> float:
         return 0.0
 
     dot = sum(vec_a.get(k, 0) * vec_b.get(k, 0) for k in all_keys)
-    norm_a = math.sqrt(sum(v ** 2 for v in vec_a.values()))
-    norm_b = math.sqrt(sum(v ** 2 for v in vec_b.values()))
+    norm_a = math.sqrt(sum(v**2 for v in vec_a.values()))
+    norm_b = math.sqrt(sum(v**2 for v in vec_b.values()))
 
     if norm_a == 0 or norm_b == 0:
         return 0.0

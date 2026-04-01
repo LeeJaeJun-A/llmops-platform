@@ -74,13 +74,9 @@ async def test_readyz_redis_down(client, mock_redis):
 
 @pytest.mark.asyncio
 async def test_usage_summary(client):
-    with patch(
-        "llmops.api.v1.admin.get_cost_tracker"
-    ) as mock_tracker_fn:
+    with patch("llmops.api.v1.admin.get_cost_tracker") as mock_tracker_fn:
         tracker = AsyncMock()
-        tracker.get_summary = AsyncMock(
-            return_value={"total_cost": 0.0, "total_tokens": 0}
-        )
+        tracker.get_summary = AsyncMock(return_value={"total_cost": 0.0, "total_tokens": 0})
         mock_tracker_fn.return_value = tracker
 
         resp = await client.get(

@@ -1,19 +1,19 @@
 """Tuning engine base abstractions."""
 
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 
-class ExperimentStatus(str, Enum):
+class ExperimentStatus(StrEnum):
     DRAFT = "draft"
     RUNNING = "running"
     COMPLETED = "completed"
     CANCELLED = "cancelled"
 
 
-class AllocationStrategy(str, Enum):
+class AllocationStrategy(StrEnum):
     AB_TEST = "ab_test"
     GRID = "grid"
     RANDOM = "random"

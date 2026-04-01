@@ -30,6 +30,6 @@ class LLMProvider(ABC):
         ...
 
     @abstractmethod
-    async def chat_stream(self, request: ChatRequest) -> AsyncIterator[ChatResponseChunk]:
+    def chat_stream(self, request: ChatRequest) -> AsyncIterator[ChatResponseChunk]:
         """Streaming completion. Yields response chunks."""
         ...

@@ -22,9 +22,7 @@ async def check_running_experiments() -> None:
     """Check all running experiments and log their current state."""
     async with async_session_factory() as session:
         result = await session.execute(
-            select(ExperimentModel).where(
-                ExperimentModel.status == ExperimentStatus.RUNNING.value
-            )
+            select(ExperimentModel).where(ExperimentModel.status == ExperimentStatus.RUNNING.value)
         )
         experiments = result.scalars().all()
 

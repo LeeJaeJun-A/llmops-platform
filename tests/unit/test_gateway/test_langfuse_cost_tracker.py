@@ -25,9 +25,7 @@ def _make_observation(
 
 @pytest.fixture
 def tracker():
-    with patch(
-        "llmops.core.gateway.langfuse_cost_tracker.LangfuseAPI"
-    ):
+    with patch("llmops.core.gateway.langfuse_cost_tracker.LangfuseAPI"):
         t = LangfuseCostTracker()
         return t
 

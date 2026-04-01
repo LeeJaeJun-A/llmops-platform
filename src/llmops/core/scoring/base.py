@@ -1,13 +1,13 @@
 """Scoring engine base abstractions."""
 
 from abc import ABC, abstractmethod
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 
-class ScoreDataType(str, Enum):
+class ScoreDataType(StrEnum):
     NUMERIC = "numeric"
     CATEGORICAL = "categorical"
     BOOLEAN = "boolean"

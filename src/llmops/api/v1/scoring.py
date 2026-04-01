@@ -89,9 +89,7 @@ async def list_pipelines(
         select(ScoringPipelineModel).where(ScoringPipelineModel.is_active.is_(True))
     )
     pipelines = result.scalars().all()
-    return PipelineListResponse(
-        pipelines=[_pipeline_to_response(p) for p in pipelines]
-    )
+    return PipelineListResponse(pipelines=[_pipeline_to_response(p) for p in pipelines])
 
 
 @router.get("/pipelines/{pipeline_id}")
@@ -101,9 +99,7 @@ async def get_pipeline(
 ) -> PipelineResponse:
     """Get a specific scoring pipeline."""
     result = await db.execute(
-        select(ScoringPipelineModel).where(
-            ScoringPipelineModel.id == pipeline_id
-        )
+        select(ScoringPipelineModel).where(ScoringPipelineModel.id == pipeline_id)
     )
     pipeline = result.scalar_one_or_none()
     if not pipeline:
@@ -121,9 +117,7 @@ async def evaluate(
     """Run a scoring pipeline on given input/output."""
     # Load pipeline config
     result = await db.execute(
-        select(ScoringPipelineModel).where(
-            ScoringPipelineModel.id == req.pipeline_id
-        )
+        select(ScoringPipelineModel).where(ScoringPipelineModel.id == req.pipeline_id)
     )
     pipeline_model = result.scalar_one_or_none()
     if not pipeline_model:
@@ -195,9 +189,7 @@ async def get_results(
     db: AsyncSession = Depends(get_db),
 ) -> dict:
     """Get scoring results for a trace."""
-    result = await db.execute(
-        select(ScoreResultModel).where(ScoreResultModel.trace_id == trace_id)
-    )
+    result = await db.execute(select(ScoreResultModel).where(ScoreResultModel.trace_id == trace_id))
     records = result.scalars().all()
 
     return {

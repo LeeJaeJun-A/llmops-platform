@@ -109,16 +109,15 @@ class RedisCostTracker(CostTracker):
             services: dict[str, Any] = {}
             cursor = 0
             while True:
-                cursor, keys = await client.scan(
-                    cursor, match="llmops:usage:*", count=100
-                )
+                cursor, keys = await client.scan(cursor, match="llmops:usage:*", count=100)
                 for key in keys:
                     parts = key.split(":")
                     if len(parts) == 3:  # llmops:usage:<service>
                         svc = parts[2]
                         if svc not in services:
                             services[svc] = await self._get_service_summary(
-                                client, svc,
+                                client,
+                                svc,
                             )
                 if cursor == 0:
                     break
@@ -128,9 +127,11 @@ class RedisCostTracker(CostTracker):
             await client.aclose()
 
     async def _get_service_summary(
-        self, client: aioredis.Redis, service_name: str,
+        self,
+        client: aioredis.Redis,
+        service_name: str,
     ) -> dict[str, Any]:
-        data = await client.hgetall(f"llmops:usage:{service_name}")
+        data = await client.hgetall(f"llmops:usage:{service_name}")  # type: ignore[misc]
         return {
             "service": service_name,
             "total_cost": float(data.get("total_cost", 0)),

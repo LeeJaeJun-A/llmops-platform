@@ -1,6 +1,7 @@
 """Gateway endpoint — /v1/chat/completions."""
 
 import json
+from collections.abc import AsyncIterator
 
 from fastapi import APIRouter, Depends, Header
 from fastapi.responses import StreamingResponse
@@ -128,7 +129,7 @@ async def _stream_response(
     chat_request: ChatRequest,
     service_name: str,
     request_id: str | None,
-):
+) -> AsyncIterator[str]:
     """Generate SSE events for streaming responses."""
     async for chunk in llm_router.chat_stream(
         chat_request,
@@ -147,7 +148,7 @@ async def _stream_response(
             ],
         }
         if chunk.usage:
-            data["usage"] = {
+            data["usage"] = {  # type: ignore[assignment]
                 "input_tokens": chunk.usage.input_tokens,
                 "output_tokens": chunk.usage.output_tokens,
                 "total_tokens": chunk.usage.total_tokens,

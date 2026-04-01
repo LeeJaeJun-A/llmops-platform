@@ -69,7 +69,10 @@ def mock_registry(mock_provider):
 
 @pytest.mark.asyncio
 async def test_chat_routes_to_provider(
-    chat_request, mock_registry, mock_observability, mock_provider,
+    chat_request,
+    mock_registry,
+    mock_observability,
+    mock_provider,
 ):
     from llmops.core.gateway.router import LLMRouter
 
@@ -94,7 +97,9 @@ async def test_chat_stream_collects_content(chat_request, mock_registry, mock_ob
         ChatResponseChunk(id="r-1", model="test", delta_content="Hello"),
         ChatResponseChunk(id="r-1", model="test", delta_content=" world"),
         ChatResponseChunk(
-            id="r-1", model="test", finish_reason="stop",
+            id="r-1",
+            model="test",
+            finish_reason="stop",
             usage=Usage(input_tokens=5, output_tokens=4, total_tokens=9),
         ),
     ]

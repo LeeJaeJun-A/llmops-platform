@@ -19,14 +19,16 @@ _now = sa.func.now()
 _tz = sa.DateTime(timezone=True)
 
 
-def _id_col() -> sa.Column:  # type: ignore[type-arg]
+def _id_col() -> sa.Column:
     return sa.Column(
-        "id", sa.Uuid(), nullable=False,
+        "id",
+        sa.Uuid(),
+        nullable=False,
         default=sa.text("gen_random_uuid()"),
     )
 
 
-def _ts_cols() -> list[sa.Column]:  # type: ignore[type-arg]
+def _ts_cols() -> list[sa.Column]:
     return [
         sa.Column("created_at", _tz, server_default=_now, nullable=False),
         sa.Column("updated_at", _tz, server_default=_now, nullable=False),
@@ -65,7 +67,9 @@ def upgrade() -> None:
         sa.Column("change_note", sa.Text(), server_default=""),
         sa.PrimaryKeyConstraint("id"),
         sa.ForeignKeyConstraint(
-            ["prompt_id"], ["prompts.id"], ondelete="CASCADE",
+            ["prompt_id"],
+            ["prompts.id"],
+            ondelete="CASCADE",
         ),
         sa.UniqueConstraint("prompt_id", "version", name="uq_prompt_version"),
     )
@@ -99,7 +103,9 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["pipeline_id"], ["scoring_pipelines.id"]),
     )
     op.create_index(
-        "ix_score_results_trace_id", "score_results", ["trace_id"],
+        "ix_score_results_trace_id",
+        "score_results",
+        ["trace_id"],
     )
 
     # --- experiments ---
@@ -111,15 +117,19 @@ def upgrade() -> None:
         sa.Column("description", sa.Text(), server_default=""),
         sa.Column("status", sa.String(50), server_default="draft", nullable=False),
         sa.Column(
-            "allocation_strategy", sa.String(50),
-            server_default="ab_test", nullable=False,
+            "allocation_strategy",
+            sa.String(50),
+            server_default="ab_test",
+            nullable=False,
         ),
         sa.Column("parameter_space", sa.JSON(), nullable=False),
         sa.Column("variants", sa.JSON(), nullable=False),
         sa.Column("scoring_pipeline_id", sa.String(255), nullable=True),
         sa.Column(
-            "traffic_percentage", sa.Float(),
-            server_default="100.0", nullable=False,
+            "traffic_percentage",
+            sa.Float(),
+            server_default="100.0",
+            nullable=False,
         ),
         sa.Column("winner_variant_id", sa.String(255), nullable=True),
         sa.Column("concluded_at", _tz, nullable=True),
@@ -143,11 +153,13 @@ def upgrade() -> None:
     )
     op.create_index(
         "ix_experiment_trials_experiment_id",
-        "experiment_trials", ["experiment_id"],
+        "experiment_trials",
+        ["experiment_id"],
     )
     op.create_index(
         "ix_experiment_trials_variant_id",
-        "experiment_trials", ["variant_id"],
+        "experiment_trials",
+        ["variant_id"],
     )
 
 

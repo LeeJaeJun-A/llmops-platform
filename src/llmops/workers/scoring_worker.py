@@ -40,16 +40,18 @@ async def enqueue_scoring_job(
     scorers_config: list[dict],
 ) -> None:
     """Push a scoring job onto the Redis queue."""
-    job = json.dumps({
-        "trace_id": trace_id,
-        "pipeline_id": pipeline_id,
-        "input_text": input_text,
-        "output_text": output_text,
-        "reference_text": reference_text,
-        "scorers_config": scorers_config,
-        "_retry_count": 0,
-    })
-    await redis.lpush(SCORING_QUEUE, job)
+    job = json.dumps(
+        {
+            "trace_id": trace_id,
+            "pipeline_id": pipeline_id,
+            "input_text": input_text,
+            "output_text": output_text,
+            "reference_text": reference_text,
+            "scorers_config": scorers_config,
+            "_retry_count": 0,
+        }
+    )
+    await redis.lpush(SCORING_QUEUE, job)  # type: ignore[misc]
 
 
 async def process_job(job_data: dict) -> None:
@@ -127,7 +129,7 @@ async def _handle_job_with_retry(redis: aioredis.Redis, job_json: str) -> None:
             WORKER_RETRY_COUNT.labels(worker_type="scoring").inc()
             await asyncio.sleep(backoff)
             job_data["_retry_count"] = retry_count
-            await redis.lpush(SCORING_QUEUE, json.dumps(job_data))
+            await redis.lpush(SCORING_QUEUE, json.dumps(job_data))  # type: ignore[misc]
         else:
             logger.error(
                 "scoring_job_dlq",
@@ -135,7 +137,7 @@ async def _handle_job_with_retry(redis: aioredis.Redis, job_json: str) -> None:
                 retry_count=retry_count,
             )
             WORKER_DLQ_COUNT.labels(worker_type="scoring").inc()
-            await redis.lpush(SCORING_DLQ, json.dumps(job_data))
+            await redis.lpush(SCORING_DLQ, json.dumps(job_data))  # type: ignore[misc]
 
 
 _shutdown = False
@@ -154,7 +156,7 @@ async def run_worker() -> None:
 
     try:
         while not _shutdown:
-            result = await redis.brpop(SCORING_QUEUE, timeout=5)
+            result = await redis.brpop(SCORING_QUEUE, timeout=5)  # type: ignore[misc]
             if result is None:
                 continue
 

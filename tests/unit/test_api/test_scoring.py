@@ -112,9 +112,7 @@ async def test_get_pipeline_not_found(client, mock_db):
     result.scalar_one_or_none.return_value = None
     mock_db.execute = AsyncMock(return_value=result)
 
-    resp = await client.get(
-        f"/v1/scoring/pipelines/{uuid.uuid4()}", headers=AUTH
-    )
+    resp = await client.get(f"/v1/scoring/pipelines/{uuid.uuid4()}", headers=AUTH)
     assert resp.status_code == 404
 
 

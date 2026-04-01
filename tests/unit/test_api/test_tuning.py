@@ -112,9 +112,7 @@ async def test_start_experiment(client, sample_experiment):
         new_callable=AsyncMock,
         return_value=running,
     ):
-        resp = await client.post(
-            "/v1/tuning/experiments/exp-1/start", headers=AUTH
-        )
+        resp = await client.post("/v1/tuning/experiments/exp-1/start", headers=AUTH)
         assert resp.status_code == 200
         assert resp.json()["status"] == "running"
 
@@ -164,9 +162,7 @@ async def test_get_results(client):
         new_callable=AsyncMock,
         return_value=results,
     ):
-        resp = await client.get(
-            "/v1/tuning/experiments/exp-1/results", headers=AUTH
-        )
+        resp = await client.get("/v1/tuning/experiments/exp-1/results", headers=AUTH)
         assert resp.status_code == 200
         data = resp.json()
         assert data["total_trials"] == 10
