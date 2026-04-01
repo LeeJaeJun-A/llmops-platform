@@ -1,0 +1,51 @@
+# Staging overrides
+replicaCount: 2
+
+config:
+  appEnv: staging
+  appDebug: "false"
+  logLevel: info
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: llmops-staging.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+karpenter:
+  enabled: true
+  clusterName: llmops-staging
+  nodeRole: llmops-staging-karpenter-node
+  instanceTypes:
+    - m6i.large
+    - m6i.xlarge
+    - m5.large
+    - m5.xlarge
+  capacityTypes:
+    - on-demand
+    - spot
+  limits:
+    cpu: 50
+    memory: 100Gi
+
+# Use secrets from AWS Secrets Manager (created by Terraform)
+secrets:
+  existingSecret: llmops-staging-app
+
+# Use external managed databases in staging
+postgresql:
+  enabled: false
+
+redis:
+  enabled: false
+
+langfuse:
+  enabled: true

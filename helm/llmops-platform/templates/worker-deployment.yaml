@@ -1,0 +1,47 @@
+{{- if .Values.worker.enabled }}
+{{- range .Values.worker.types }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "llmops.fullname" $ }}-worker-{{ .name }}
+  labels:
+    {{- include "llmops.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: worker-{{ .name }}
+spec:
+  replicas: {{ .replicaCount | default $.Values.worker.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "llmops.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: worker-{{ .name }}
+  template:
+    metadata:
+      labels:
+        {{- include "llmops.selectorLabels" $ | nindent 8 }}
+        app.kubernetes.io/component: worker-{{ .name }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
+    spec:
+      serviceAccountName: {{ include "llmops.serviceAccountName" $ }}
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: {{ $.Chart.Name }}-worker-{{ .name }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          command: ["python", "-m", "llmops.workers.{{ .module }}"]
+          envFrom:
+            - configMapRef:
+                name: {{ include "llmops.fullname" $ }}-config
+            - secretRef:
+                name: {{ include "llmops.secretName" $ }}
+          livenessProbe:
+            exec:
+              command: ["python", "-c", "import os; os.kill(1, 0)"]
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            failureThreshold: 3
+          resources:
+            {{- toYaml (default $.Values.worker.resources .resources) | nindent 12 }}
+{{- end }}
+{{- end }}

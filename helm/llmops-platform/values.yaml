@@ -1,0 +1,134 @@
+# =============================================================================
+# LLMOps Platform — Default Values
+# =============================================================================
+
+replicaCount: 2
+
+image:
+  repository: ghcr.io/your-org/llmops-platform
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+  className: nginx
+  annotations: {}
+  hosts:
+    - host: llmops.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+# --- Worker (scoring + tuning background tasks) ---
+worker:
+  enabled: true
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  types:
+    - name: scoring
+      module: scoring_worker
+    - name: tuning
+      module: tuning_worker
+
+# --- Application Config ---
+config:
+  appEnv: production
+  appDebug: "false"
+  logLevel: info
+  observabilityBackend: langfuse
+  langfuseHost: "http://langfuse-web.langfuse.svc:3000"
+  rateLimitRequestsPerMinute: "60"
+
+# --- Secrets (reference existing K8s Secret or create inline) ---
+secrets:
+  existingSecret: ""
+  # Only used if existingSecret is empty:
+  anthropicApiKey: ""
+  geminiApiKey: ""
+  langfusePublicKey: ""
+  langfuseSecretKey: ""
+  databaseUrl: ""
+  redisUrl: ""
+  apiKeys: ""
+
+# --- Karpenter Node Scaling ---
+karpenter:
+  enabled: false
+  clusterName: ""
+  nodeRole: ""
+  amiAlias: "al2023@latest"
+  volumeSize: 100Gi
+  instanceTypes:
+    - m6i.large
+    - m6i.xlarge
+    - m5.large
+    - m5.xlarge
+  architectures:
+    - amd64
+  capacityTypes:
+    - on-demand
+    - spot
+  availabilityZones:
+    - ap-northeast-2a
+    - ap-northeast-2c
+  limits:
+    cpu: 100
+    memory: 200Gi
+  disruption:
+    consolidateAfter: 30s
+    consolidationPolicy: WhenEmptyOrUnderutilized
+    expireAfter: 720h
+    budgetNodes: "10%"
+  weight: 100
+  tags: {}
+
+# --- Dependencies ---
+langfuse:
+  enabled: true
+
+postgresql:
+  enabled: true
+  auth:
+    username: llmops
+    password: llmops
+    database: llmops
+
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: false

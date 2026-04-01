@@ -1,0 +1,46 @@
+{{- if .Values.karpenter.enabled }}
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: {{ include "llmops.fullname" . }}
+  labels:
+    {{- include "llmops.labels" . | nindent 4 }}
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "llmops.selectorLabels" . | nindent 8 }}
+        pool: llmops
+    spec:
+      nodeClassRef:
+        apiVersion: karpenter.k8s.aws/v1
+        kind: EC2NodeClass
+        name: {{ include "llmops.fullname" . }}
+      requirements:
+        - key: node.kubernetes.io/instance-type
+          operator: In
+          values:
+            {{- toYaml .Values.karpenter.instanceTypes | nindent 12 }}
+        - key: kubernetes.io/arch
+          operator: In
+          values:
+            {{- toYaml .Values.karpenter.architectures | nindent 12 }}
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values:
+            {{- toYaml .Values.karpenter.capacityTypes | nindent 12 }}
+        - key: topology.kubernetes.io/zone
+          operator: In
+          values:
+            {{- toYaml .Values.karpenter.availabilityZones | nindent 12 }}
+  limits:
+    cpu: {{ .Values.karpenter.limits.cpu | quote }}
+    memory: {{ .Values.karpenter.limits.memory }}
+  disruption:
+    consolidateAfter: {{ .Values.karpenter.disruption.consolidateAfter }}
+    consolidationPolicy: {{ .Values.karpenter.disruption.consolidationPolicy }}
+    expireAfter: {{ .Values.karpenter.disruption.expireAfter }}
+    budgets:
+      - nodes: {{ .Values.karpenter.disruption.budgetNodes | quote }}
+  weight: {{ .Values.karpenter.weight }}
+{{- end }}

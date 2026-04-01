@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment — NEVER commit real secrets
+.env
+.env.*
+!.env.example
+!.env.secrets.example
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Claude Code
+.claude/
+CLAUDE.md
+
+# Credentials / keys (catch-all)
+*.pem
+*.key
+*.cert
+*.p12
+credentials.json
+service-account*.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite3
+
+# Docker volumes (local)
+data/
+
+# Terraform
+infra/live/**/.terraform/
+infra/live/**/.terragrunt-cache/
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+*.tfplan
+
+# Helm
+helm/**/charts/
+helm/**/Chart.lock
+
+# Temp
+/tmp/
+*.bak
+
+# docs
+docs/

@@ -1,0 +1,47 @@
+# Development overrides
+replicaCount: 1
+
+config:
+  appEnv: development
+  appDebug: "true"
+  logLevel: debug
+
+autoscaling:
+  enabled: false
+
+podDisruptionBudget:
+  enabled: false
+
+worker:
+  replicaCount: 1
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+karpenter:
+  enabled: true
+  clusterName: llmops-dev
+  nodeRole: llmops-dev-karpenter-node
+  instanceTypes:
+    - t3.medium
+    - t3.large
+    - m6i.large
+  capacityTypes:
+    - on-demand
+  limits:
+    cpu: 20
+    memory: 40Gi
+
+langfuse:
+  enabled: true
+
+postgresql:
+  enabled: true
+
+redis:
+  enabled: true
